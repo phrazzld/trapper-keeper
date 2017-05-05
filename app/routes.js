@@ -1,10 +1,11 @@
 var Log      = require("./models/log");
 var Resource = require("./models/resource");
 var Project  = require("./models/project");
+var User     = require("./models/user");
 
 module.exports = function(router) {
     // test route
-    // GET http://localhost:8080/api
+    // GET /api
     router.get("/", function(req, res) {
         res.json({ message: "whirrrrr... api operational..." });
     });
@@ -14,7 +15,7 @@ module.exports = function(router) {
     // ##############################################################################
     router.route("/logs")
     // create a log
-    // POST http://localhost:8080/api/logs
+    // POST /api/logs
         .post(function(req, res) {
             var log = new Log();
             log.text = req.body.text;
@@ -25,9 +26,8 @@ module.exports = function(router) {
                 res.json({ message: "Logged" });
             });
         })
-
     // get all the logs
-    // GET http://localhost:8080/api/logs
+    // GET /api/logs
         .get(function(req, res) {
             Log.find(function(err, logs) {
                 if (err)
@@ -36,11 +36,10 @@ module.exports = function(router) {
             });
         })
     ;
-
     // -----------------------------------------------------------------------------
     router.route("/logs/:log_id")
     // get a log
-    // GET http://localhost:8080/api/logs/:log_id
+    // GET /api/logs/:log_id
         .get(function(req, res) {
             Log.findById(req.params.log_id, function(err, log) {
                 if (err)
@@ -48,9 +47,8 @@ module.exports = function(router) {
                 res.json(log);
             });
         })
-
     // update a log
-    // PUT http://localhost:8080/api/logs/:log_id
+    // PUT /api/logs/:log_id
         .put(function(req, res) {
             Log.findById(req.params.log_id, function(err, log) {
                 if (err)
@@ -67,9 +65,8 @@ module.exports = function(router) {
                 });
             });
         })
-
     // delete a log
-    // DELETE http://localhost:8080/api/logs/:log_id
+    // DELETE /api/logs/:log_id
         .delete(function(req, res) {
             Log.remove({
                 _id: req.params.log_id
@@ -81,13 +78,12 @@ module.exports = function(router) {
         })
     ;
 
-
     // #############################################################################
     // RESOURCES ###################################################################
     // #############################################################################
     router.route("/resources")
     // create a resource
-    // POST http://localhost:8080/api/resources
+    // POST /api/resources
         .post(function(req, res) {
             var resource = new Resource();
             // set properties from request body
@@ -101,9 +97,8 @@ module.exports = function(router) {
                 res.json({ message: "Resource saved" });
             });
         })
-
     // get all the resources
-    // GET http://localhost:8080/api/resources
+    // GET /api/resources
         .get(function(req, res) {
             Resource.find(function(err, resources) {
                 if (err)
@@ -112,11 +107,10 @@ module.exports = function(router) {
             });
         })
     ;
-
     // -----------------------------------------------------------------------------
     router.route("/resources/:resource_id")
     // get a resource
-    // GET http://localhost:8080/api/resources/:resource_id
+    // GET /api/resources/:resource_id
         .get(function(req, res) {
             Resource.findById(req.params.resource_id, function(err, resource) {
                 if (err)
@@ -124,9 +118,8 @@ module.exports = function(router) {
                 res.json(resource);
             });
         })
-
     // update a resource
-    // PUT http://localhost:8080/api/resources/:resource_id
+    // PUT /api/resources/:resource_id
         .put(function(req, res) {
             Resource.findById(req.params.resource_id, function(err, resource) {
                 if (err)
@@ -144,9 +137,8 @@ module.exports = function(router) {
                 });
             });
         })
-
     // delete a resource
-    // DELETE http://localhost:8080/api/resources/:resource_id
+    // DELETE /api/resources/:resource_id
         .delete(function(req, res) {
             Resource.remove({
                 _id: req.params.resource_id
@@ -158,13 +150,12 @@ module.exports = function(router) {
         })
     ;
 
-
     // #############################################################################
     // PROJECTS ####################################################################
     // #############################################################################
     router.route("/projects")
     // create a project
-    // POST http://localhost:8080/api/projects
+    // POST /api/projects
         .post(function(req, res) {
             var project = new Project();
             // set properties from request body
@@ -178,9 +169,8 @@ module.exports = function(router) {
                 res.json({ message: "Project created" });
             });
         })
-
     // get all projects
-    // GET http://localhost:8080/api/projects
+    // GET /api/projects
         .get(function(req, res) {
             Project.find(function(err, project) {
                 if (err)
@@ -189,10 +179,10 @@ module.exports = function(router) {
             });
         })
     ;
-
+    // ------------------------------------------------------------------------------
     router.route("/projects/:project_id")
     // get a project
-    // GET http://localhost:8080/api/projects/:project_id
+    // GET /api/projects/:project_id
         .get(function(req, res) {
             Project.findById(req.params.project_id, function(err, project) {
                 if (err)
@@ -200,9 +190,8 @@ module.exports = function(router) {
                 res.send(project);
             });
         })
-
     // update a project
-    // PUT http://localhost:8080/api/projects/:project_id
+    // PUT /api/projects/:project_id
         .put(function(req, res) {
             Project.findById(req.params.project_id, function(err, project) {
                 if (err)
@@ -219,9 +208,8 @@ module.exports = function(router) {
                 });
             });
         })
-
     // delete a project
-    // DELETE http://localhost:8080/api/projects/:project_id
+    // DELETE /api/projects/:project_id
         .delete(function(req, res) {
             Project.remove({
                 _id: req.params.project_id
@@ -229,6 +217,73 @@ module.exports = function(router) {
                 if (err)
                     res.send(err);
                 res.json({ message: "Project deleted." });
+            });
+        })
+    ;
+
+    // ##############################################################################
+    // USERS ########################################################################
+    // ##############################################################################
+    router.route("/users")
+    // create a user
+    // POST /api/users
+        .post(function(req, res) {
+            var user = new User();
+            // save values from POST request to new user object
+            user.email = req.body.email;
+            user.password = req.body.password;
+            // save the new user
+            user.save(function(err) {
+                if (err)
+                    res.send(err);
+                res.json({ message: "User created." });
+            });
+        })
+    // get all users
+    // GET /api/users
+        .get(function(req, res) {
+            User.find(function(err, users) {
+                if (err)
+                    res.send(err);
+                res.json(users);
+            });
+        })
+    ;
+    // ------------------------------------------------------------------------------
+    router.route("/users/:user_id")
+    // get a user
+    // GET /api/users/:user_id
+        .get(function(req, res) {
+            User.findById(req.params.user_id, function(err, user) {
+                if (err)
+                    res.send(err);
+                res.json(user);
+            });
+        })
+    // update a user
+    // PUT /api/users/:user_id
+        .put(function(req, res) {
+            User.findById(req.params.user_id, function(err, user) {
+                if (err)
+                    res.send(err);
+                user.email = req.body.email;
+                user.password = req.body.password;
+                user.save(function(err) {
+                    if (err)
+                        res.send(err);
+                    res.json({ message: "User updated." });
+                });
+            });
+        })
+    // delete a user
+    // DELETE /api/users/:user_id
+        .delete(function(req, res) {
+            User.remove({
+                _id: req.params.user_id
+            }, function(err, user) {
+                if (err)
+                    res.send(err);
+                res.json({ message: "User deleted." });
             });
         })
     ;

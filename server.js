@@ -1,10 +1,9 @@
 // BASE SETUP
 // ==================================================================================
 
-// grab necessary packages
-var express = require('express');
+var express = require('express');                   // middleware
+var bodyParser = require('body-parser');            // parse data from POSTs
 var app = express();
-var bodyParser = require('body-parser');
 
 // use bodyParser to get data from POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,8 +12,7 @@ app.use(bodyParser.json());
 // set our port
 var port = process.env.PORT || 8080;
 
-// use mongoose as our db orm
-var mongoose = require('mongoose');
+var mongoose = require('mongoose');                 // db orm
 mongoose.connect('mongodb://localhost/trapperkeeper');
 
 // API ROUTES
